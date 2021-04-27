@@ -57,8 +57,8 @@ node {
 }
 ```
 
-To use it with this library, what you need is import this library and write it 
-this way
+To migrate your script to use with this library, what you need is import this 
+library and write it this way
 ```groovy
 
 // Import this share library, you should add it to Jenkins before you start to use it.
