@@ -57,3 +57,79 @@ node {
 }
 ```
 
+To use it with this library, what you need is import this library and write it 
+this way
+```groovy
+
+// Import this share library, you should add it to Jenkins before you start to use it.
+@Library('jenkins-oo-shared-lib')
+import com.github.link89.jenkins.BaseJob
+
+// Start to use the method defined in BaseJob by deriving your new class from it
+class SimpleJob extends BaseJob {
+  void doRun() {
+    // to access the native methods of Jenkins script via `jenkins`
+    jenkins.node {
+      jenkins.checkout([
+              $class: 'GitSCM',
+              branches: [[name: '*/main']],
+              extensions: [[$class: 'CleanCheckout']],
+              userRemoteConfigs: [
+                      [url: 'git@github.com:link89/jenkins-oo-shared-lib.git']
+              ]
+      ])
+    }
+  }
+}
+
+// You need to pass the script handler to the job object,
+// so that it can access the native methods provided by Jenkins.
+new SimpleJob(jenkins: this).run()
+```
+
+Congratulations, you have already migrated your script to use this library by
+just adding the `jenkins.` prefix to some Jenkins native methods.
+
+Since the checkout is a common operation, I have already created a friendly 
+method to do the same thing with less code.
+
+```groovy
+class SimpleJobV2 extends BaseJob {
+  void doRun() {
+    jenkins.node {
+      // Use the method define in `BaseJob` to simplify your script.
+      gitSimpleCheckout([
+              url: 'git@github.com:link89/jenkins-oo-shared-lib.git',
+              branch: 'master',
+      ])
+    }
+  }
+}
+new SimpleJobV2(jenkins: this).run()
+```
+
+Now you may want to parameterize this job so that other users can decide the
+project and branch to check out. Luckily, this shared library will load `yaml`
+configuration for you automatically when it exists. What you need is add a 
+multi-lines string field named `CONFIGS` to your job anf field with the 
+following default value
+
+```yaml
+git:
+  url: git@github.com:link89/jenkins-oo-shared-lib.git 
+  branch: main
+```
+
+Now your your script will look like this
+```groovy
+class SimpleJobV3 extends BaseJob {
+  void doRun() {
+    jenkins.node {
+      gitSimpleCheckout(c('git') )
+    }
+  }
+}
+new SimpleJobV3(jenkins: this).run()
+```
+
+See, you have already been good at using this library.
