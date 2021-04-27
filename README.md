@@ -114,7 +114,7 @@ new SimpleJobV2(jenkins: this).run()
 Now you may want to parameterize this job so that other users can decide the
 project and branch to check out. Luckily, this shared library will load `yaml`
 configuration for you automatically when it exists. What you need is add a 
-multi-lines string field named `CONFIGS` to your job anf field with the 
+multi-lines string field named `CONFIGS` to your job and fill it with the 
 following default value
 
 ```yaml
