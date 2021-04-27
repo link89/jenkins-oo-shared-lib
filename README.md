@@ -12,7 +12,7 @@ those libraries, you need to not only have the knowledge of Jenkins, but also
 knowledge of domain specific conventions and concepts defined by them, 
 which would take you extra time to learn before you can start your own task.
 
-In my opinion An idea Jenkins libraries should avoid those limitations mentioned 
+In my opinion an idea Jenkins libraries should avoid those limitations mentioned 
 above. That's why I design this share library to help me maintain my pipeline scripts.
 
 I would suggest you to use it with 
@@ -94,6 +94,9 @@ Since the checkout is a common operation, I have already created a friendly
 method to do the same thing with less code.
 
 ```groovy
+@Library('jenkins-oo-shared-lib')
+import com.github.link89.jenkins.BaseJob
+
 class SimpleJobV2 extends BaseJob {
   void doRun() {
     jenkins.node {
@@ -120,11 +123,15 @@ git:
   branch: main
 ```
 
-Now your your script will look like this
+Now your script will look like this
 ```groovy
+@Library('jenkins-oo-shared-lib')
+import com.github.link89.jenkins.BaseJob
+
 class SimpleJobV3 extends BaseJob {
   void doRun() {
     jenkins.node {
+      // `c` is a magic method to help you read value from CONFIGS
       gitSimpleCheckout(c('git') )
     }
   }
