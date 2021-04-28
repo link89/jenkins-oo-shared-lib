@@ -5,14 +5,14 @@ principles in mind.
 
 I know there are already popular Jenkins share libraries, like
 [Piper](https://github.com/SAP/jenkins-library) for example, are powerful and 
-use by a lot of developers. But for solutions like Piper, one of the major
-concern for a team to adopt them is that they are opinionated, especially
-when the team have already had a bunch of pipeline scripts. In order to use 
-those libraries, you need to not only have the knowledge of Jenkins, but also
-knowledge of domain specific conventions and concepts defined by them, 
-which would take you extra time to learn before you can start your own task.
+popular. But for solutions like Piper, one of the common concern for a team 
+to adopt them is that they are opinionated, especially to a team that have 
+already had a bunch of pipeline scripts. In order to use those libraries, you 
+need to not only have the knowledge of Jenkins, but also the knowledge of domain 
+specific conventions and concepts defined by them, which would take you extra 
+time before you can start to use it in your own task.
 
-In my opinion an ideal Jenkins libraries should avoid those limitations mentioned 
+In my opinion, an ideal Jenkins libraries should avoid the restrictions mentioned 
 above. That's why I design this share library to help me maintain my pipeline scripts.
 
 I would suggest you to use it with 
@@ -23,7 +23,7 @@ if you want to get rid of the Jenkins' web UI to set up your pipeline.
 
 By creating this new Jenkins share library, my hope is that
 
-- It must be un-opinionated, so that it can be easily adopted with little efforts.
+- It should be un-opinionated, so that it can be easily adopted with little efforts.
 
 - Any well-trained Java/Groovy programmers can start to use it without any extra 
   knowledge besides of Jenkins. That's why it is built with the popular 
@@ -34,14 +34,14 @@ By creating this new Jenkins share library, my hope is that
   
 ## Installation
 
-Follow the Jenkins official 
+Follow the Jenkins' official 
 [guideline](https://www.jenkins.io/doc/book/pipeline/shared-libraries/#global-shared-libraries) 
 to add this library in global or folder level. Then you can start to use it in
 your own pipeline script. 
   
 ## Get Started
 
-Given you already have a normal scripted pipeline that checkout the source code 
+Given you already have a normal scripted pipeline that check out the source code 
 from github, which may look like this:
 
 ```groovy
@@ -51,14 +51,15 @@ node {
           branches: [[name: '*/main']],
           extensions: [[$class: 'CleanCheckout']],
           userRemoteConfigs: [
-                  [url: 'git@github.com:link89/jenkins-oo-shared-lib.git']
+                  [url: 'git@github.com:link89/selenium-federation.git']
           ]
   ])
 }
 ```
 
-To migrate your script to use with this library, what you need is import this 
-library and write it this way
+To migrate your script to this library, what you need is import this library to
+your script, overwrite the `doRun` method by copy-paste your original script,
+and add `jenkins.` to the steps functions provided by Jenkins.
 ```groovy
 
 // Import this share library, you should add it to Jenkins before you start to use it.
@@ -75,7 +76,7 @@ class SimpleJob extends BaseJob {
               branches: [[name: '*/main']],
               extensions: [[$class: 'CleanCheckout']],
               userRemoteConfigs: [
-                      [url: 'git@github.com:link89/jenkins-oo-shared-lib.git']
+                      [url: 'git@github.com:link89/selenium-federation.git']
               ]
       ])
     }
@@ -87,11 +88,11 @@ class SimpleJob extends BaseJob {
 new SimpleJob(jenkins: this).run()
 ```
 
-Congratulations, you have already migrated your script to use this library by
-just adding the `jenkins.` prefix to some Jenkins native methods.
+See, it doesn't take too much effort to migrate your script to this library.
 
-Since the checkout is a common operation, I have already created a friendly 
-method to do the same thing with less code.
+Since the checkout is a common operation, I have already provided a friendly 
+method to do the same thing with less code. Now your can rewrite your checkout 
+method to make your script more clean.
 
 ```groovy
 @Library('jenkins-oo-shared-lib')
@@ -111,7 +112,7 @@ class SimpleJobV2 extends BaseJob {
 new SimpleJobV2(jenkins: this).run()
 ```
 
-Now you may want to parameterize this job so that other users can decide the
+Now you may want to parameterize the job so that other users can decide what  
 project and branch to check out. Luckily, this shared library will load `yaml`
 configuration for you automatically when it exists. What you need is add a 
 multi-lines string field named `CONFIGS` to your job and fill it with the 
@@ -119,7 +120,7 @@ following default value
 
 ```yaml
 git:
-  url: git@github.com:link89/jenkins-oo-shared-lib.git 
+  url: git@github.com:link89/selenium-federation.git 
   branch: main
 ```
 
@@ -138,5 +139,3 @@ class SimpleJobV3 extends BaseJob {
 }
 new SimpleJobV3(jenkins: this).run()
 ```
-
-See, you have already been good at using this library.
