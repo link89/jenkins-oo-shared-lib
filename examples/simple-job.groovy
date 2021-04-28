@@ -1,5 +1,5 @@
 // Import this share library, you should add it to Jenkins before you start to use it.
-@Library('jenkins-oo-shared-lib')
+@Library('selenium-federation')
 import com.github.link89.jenkins.BaseJob
 
 // Start to use the method defined in BaseJob by deriving your new class from it
@@ -12,7 +12,7 @@ class SimpleJob extends BaseJob {
                     branches: [[name: '*/main']],
                     extensions: [[$class: 'CleanCheckout']],
                     userRemoteConfigs: [
-                            [url: 'git@github.com:link89/jenkins-oo-shared-lib.git']
+                            [url: 'git@github.com:link89/selenium-federation.git']
                     ]
             ])
         }
@@ -30,7 +30,7 @@ class SimpleJobV2 extends BaseJob {
         jenkins.node {
             // Use the method define in `BaseJob` to simplify your script.
             gitSimpleCheckout([
-                    url: 'git@github.com:link89/jenkins-oo-shared-lib.git',
+                    url: 'git@github.com:link89/selenium-federation.git',
                     branch: 'master',
             ])
         }
