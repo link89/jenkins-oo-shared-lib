@@ -149,9 +149,9 @@ new SimpleJobV3(jenkins: this).run()
 Let's move forward. Suppose the project you are working on is a nodejs project,
 that use `nvm` to manage the nodejs dependency. You may find there is a Jenkins
 plugin named [nvm-wrapper](https://plugins.jenkins.io/nvm-wrapper/), but it 
-didn't support to read the version from `.nvmrc` file. You know this will be 
-useful for other nodejs projects. Then you can implement some helper method in
-the `BaseJob` class this way
+didn't support to read the version from `.nvmrc` file. Since you know it will be 
+useful for other nodejs projects, then you can implement your helper method in
+the `BaseJob` class to handle `.nvmrc` file.
 
 ```groovy
 class BaseJob {
