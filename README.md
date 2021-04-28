@@ -41,6 +41,8 @@ your own pipeline script.
   
 ## Get Started
 
+### Migrate Your Scripts in 1 Minute
+
 Given you already have a normal scripted pipeline that check out the source code 
 from github, which may look like this:
 
@@ -90,6 +92,8 @@ new SimpleJob(jenkins: this).run()
 
 See, it doesn't take too much effort to migrate your script to this library.
 
+### Using this Shared Library in Your Script
+
 Since the checkout is a common operation, I have already provided a friendly 
 method to do the same thing with less code. Now your can rewrite your checkout 
 method to make your script more clean.
@@ -138,4 +142,52 @@ class SimpleJobV3 extends BaseJob {
   }
 }
 new SimpleJobV3(jenkins: this).run()
+```
+
+### Implement Your Own Share Methods
+
+Let's move forward. Suppose the project you are working on is a nodejs project,
+that use `nvm` to manage the nodejs dependency. You may find there is a Jenkins
+plugin named [nvm-wrapper](https://plugins.jenkins.io/nvm-wrapper/), but it 
+didn't support to read the version from `.nvmrc` file. You know this will be 
+useful for other nodejs projects. Then you can implement some helper method in
+the `BaseJob` class this way
+
+```groovy
+class BaseJob {
+  /* ... */
+  /* ... */
+
+  protected String getDefaultNodeJsVersion() { 'v12.22.1' }
+    
+  /**
+   * A helper method to read NodeJs version from .nvmrc file
+   * It is suppose to use with Jenkins nvm plugin
+   * @return NodeJs version
+   */
+  String getNodeJsVersionFromNvmrc() {
+    try {
+      // the trim is essential or else the nvm plugin may fail!
+      return jenkins.readFile('.nvmrc').trim()
+    } catch (Exception e) {
+      return defaultNodeJsVersion
+    }
+  }
+}
+```
+
+And use it in your script:
+
+```groovy
+class SimpleJobV4 extends BaseJob {
+  void doRun() {
+    jenkins.node {
+      gitSimpleCheckout(c('git') )
+      jenkins.nvm(nodeJsVersionFromNvmrc) {
+        jenkins.sh 'npm install'
+        jenkins.sh 'npm publish'
+      }
+    }
+  }
+}
 ```

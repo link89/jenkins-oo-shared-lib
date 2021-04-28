@@ -50,3 +50,16 @@ class SimpleJobV3 extends BaseJob {
 }
 
 new SimpleJobV3(jenkins: this).run()
+
+
+class SimpleJobV4 extends BaseJob {
+    void doRun() {
+        jenkins.node {
+            gitSimpleCheckout(c('git') )
+            jenkins.nvm(nodeJsVersionFromNvmrc) {
+                jenkins.sh 'npm install'
+                jenkins.sh 'npm publish'
+            }
+        }
+    }
+}
