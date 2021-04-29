@@ -107,7 +107,7 @@ class SimpleJobV2 extends BaseJob {
     jenkins.node {
       // Use the method define in `BaseJob` to simplify your script.
       gitSimpleCheckout([
-              url: 'git@github.com:link89/jenkins-oo-shared-lib.git',
+              url: 'git@github.com:link89/selenium-federation.git',
               branch: 'master',
       ])
     }
