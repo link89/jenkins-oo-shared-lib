@@ -13,7 +13,7 @@ class BaseJob {
      * @param rhs
      * @return
      */
-    Map mergeMaps(PropertyValue.Map lhs, Map rhs) {
+    Map mergeMaps(Map lhs, Map rhs) {
         rhs.each { k, v ->
             lhs[k] = (lhs[k] in Map ? mergeMaps(lhs[k], v) : v)
         }
